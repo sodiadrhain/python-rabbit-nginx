@@ -23,7 +23,7 @@ def send_email(to_email):
     smtp_server = os.getenv('SMTP_SERVER')
     smtp_port = os.getenv('SMTP_PORT')
     subject = 'Messaging System with RabbitMQ, Celery and Python Application Test Email'
-    body = 'Testing the python application.'
+    body = 'Testing the python application for Slack - @soji, adesojiawobajo@gmail.com.'
     msg = MIMEMultipart()
     msg['From'] = os.getenv('SMTP_FROM')
     msg['To'] = to_email
@@ -59,6 +59,7 @@ def main():
 
     # check if talktome is passed in the url query
     if 'talktome' in request.args:
+            log()
             return jsonify({'success': 'logged the current time'})
 
     return """<html>
@@ -86,12 +87,8 @@ def check(email):
         return False
     
 def log():
-    file_folder = './var/logs/'
-    if not os.path.exists(file_folder):
-        os.makedirs(file_folder)
-    file_path = "./var/logs/messaging_system.log"
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-  
-    s = open(file_path, 'a')
-    s.write('Current time: ' + current_time + '\n')
+    log_file_folder_path = os.path.join(os.path.expanduser('~'), 'messaging_system.log')
+    with open(log_file_folder_path, 'a') as f:
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        f.write('Current time: ' + current_time + '\n')
